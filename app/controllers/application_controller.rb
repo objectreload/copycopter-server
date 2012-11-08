@@ -1,5 +1,8 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
+  
+  before_filter :authenticate
+  
   helper_method :prefer_html?
   hide_action :prefer_html?, :set_html_preference
 
@@ -39,6 +42,14 @@ class ApplicationController < ActionController::Base
   def find_by_project_id
     if params[:project_id]
       Project.find params[:project_id]
+    end
+  end
+  
+  def authenticate
+    if Rails.env.production?
+      authenticate_or_request_with_http_basic do |username, password|
+        username == ENV["HTTP_USER"] && password == ENV["HTTP_PASS"]
+      end
     end
   end
 end
