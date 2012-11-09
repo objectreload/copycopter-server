@@ -25,7 +25,7 @@ class ApplicationController < ActionController::Base
   end
 
   def authenticate(project)
-    unless Rails.env.test?
+    if Rails.env.production?
       authenticate_or_request_with_http_basic do |username, password|
         username == project.username && project.valid_password?(password)
       end
