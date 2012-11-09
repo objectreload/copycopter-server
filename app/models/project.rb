@@ -120,7 +120,7 @@ class Project < ActiveRecord::Base
   end
 
   def create_english_locale
-    locales.create! :key => 'en'
+    locales.create! key: "us"
   end
 
   def delete_localizations_and_blurbs
@@ -144,5 +144,5 @@ class Project < ActiveRecord::Base
   
   def encrypt_password(password)
      BCrypt::Password.create("#{password}#{PEPPER}", cost: COST)
-   end
+  end
 end

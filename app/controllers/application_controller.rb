@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
   
-  before_filter :basic_authenticate
+  before_filter :basic_authentication
   
   helper_method :prefer_html?
   hide_action :prefer_html?, :set_html_preference
@@ -16,7 +16,7 @@ class ApplicationController < ActionController::Base
 
   private
   
-  def basic_authenticate
+  def basic_authentication
     if Rails.env.production?
       authenticate_or_request_with_http_basic do |username, password|
         username == ENV["HTTP_USER"] && password == ENV["HTTP_PASS"]
