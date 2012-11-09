@@ -52,7 +52,7 @@ class CreateSchema < ActiveRecord::Migration
       t.boolean 'archived', :default => false, :null => false
       t.integer 'draft_cache_id'
       t.string 'name'
-      t.string 'password', :default => 'copter', :null => false
+      t.string 'encrypted_password'
       t.integer 'published_cache_id'
       t.string 'username', :default => 'copy', :null => false
     end

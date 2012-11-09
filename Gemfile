@@ -12,6 +12,7 @@ gem 'yajl-ruby', '1.1.0', :require => 'yajl'
 gem "jquery-rails", "1.0.19"
 gem "capistrano"
 gem "rvm-capistrano"
+gem "bcrypt-ruby"
 
 group :assets do
   gem 'sass-rails', "~> 3.2.5"
