@@ -18,6 +18,7 @@ FactoryGirl.define do
 
   factory :project do
     name
+    password "copter"
   end
 
   factory :version do
