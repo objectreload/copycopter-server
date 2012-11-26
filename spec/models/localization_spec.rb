@@ -78,9 +78,9 @@ describe Localization do
   it 'orders by key' do
     project = Factory(:project)
     project.create_defaults(
-      'us.def' => 'one',
-      'us.abc' => 'two',
-      'us.ghi' => 'three'
+      'en.def' => 'one',
+      'en.abc' => 'two',
+      'en.ghi' => 'three'
     )
 
     Localization.ordered.map(&:key).should == %w(abc def ghi)
@@ -117,11 +117,11 @@ describe Localization do
 
   context '#alternates' do
     let(:project) { Factory(:project) }
-    let(:enabled_locales) { project.locales.where(:key => %w(us es)) }
+    let(:enabled_locales) { project.locales.where(:key => %w(en es)) }
     let(:disabled_locale) { project.locales.where(:key => 'de').first }
 
     before do
-      project.create_defaults('us.test' => 'value',
+      project.create_defaults('en.test' => 'value',
         'es.test' => 'value',
         'de.test' => 'value')
 

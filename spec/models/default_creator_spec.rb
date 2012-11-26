@@ -26,42 +26,42 @@ describe DefaultCreator do
                            :draft_content     => 'draft two',
                            :published_content => 'published two'
 
-    create_defaults 'us.test.one' => 'new one', 'us.test.three' => 'new three'
+    create_defaults 'en.test.one' => 'new one', 'en.test.three' => 'new three'
     project.localizations(true).map(&:draft_content).should =~ ['draft one', 'draft two', 'new three']
     project.localizations.map(&:published_content).should =~ ['', 'published one', 'published two']
   end
 
   it 'ignores blank keys' do
-    create_defaults 'us.test.one' => 'not blank', '' => 'blank'
+    create_defaults 'en.test.one' => 'not blank', '' => 'blank'
     project.localizations(true).map(&:draft_content).should =~ ['not blank']
   end
 
   it "only updates the project once when creating several defaults" do
     Project.connection.stubs :update
-    create_defaults 'us.test.one' => 'value', 'us.test.two' => 'other'
+    create_defaults 'en.test.one' => 'value', 'en.test.two' => 'other'
     Project.connection.should update_table("projects").once
   end
 
   it 'creates missing locales' do
-    create_defaults 'us.test' => 'value', 'us.test' => 'valor'
+    create_defaults 'en.test' => 'value', 'en.test' => 'valor'
     project.draft_json.should == Yajl::Encoder.encode(
-      'us.test' => 'value', 'us.test' => 'valor'
+      'en.test' => 'value', 'en.test' => 'valor'
     )
   end
 
   it 'activates after creating a blurb' do
-    create_defaults('us.test' => 'value')
+    create_defaults('en.test' => 'value')
     project.reload.should be_active
   end
 
   it 'creates defaults in all locales' do
-    create_defaults 'us.test' => 'value', 'es.test' => 'valor',
-      'us.other' => 'other'
+    create_defaults 'en.test' => 'value', 'es.test' => 'valor',
+      'en.other' => 'other'
 
     draft_hash.should == {
-      'us.test' => 'value',
+      'en.test' => 'value',
       'es.test' => 'valor',
-      'us.other' => 'other',
+      'en.other' => 'other',
       'es.other' => 'other'
     }
   end
@@ -70,19 +70,19 @@ describe DefaultCreator do
     create_defaults 'es.test' => 'valor'
 
     draft_hash.should == {
-      'us.test' => '',
+      'en.test' => '',
       'es.test' => 'valor'
     }
   end
 
   it 'fills in defaults for new locales' do
-    create_defaults 'us.one' => 'one', 'us.two' => 'two'
+    create_defaults 'en.one' => 'one', 'en.two' => 'two'
     create_defaults 'es.one' => 'uno'
 
     draft_hash.should == {
-      'us.one' => 'one',
+      'en.one' => 'one',
       'es.one' => 'uno',
-      'us.two' => 'two',
+      'en.two' => 'two',
       'es.two' => 'two'
     }
   end

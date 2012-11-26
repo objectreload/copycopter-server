@@ -120,7 +120,7 @@ class Project < ActiveRecord::Base
   end
 
   def create_english_locale
-    locales.create! key: "us"
+    locales.create! key: "en"
   end
 
   def delete_localizations_and_blurbs

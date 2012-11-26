@@ -41,7 +41,7 @@ describe Project, '.create' do
   end
 
   it 'creates an English locale' do
-    @project.locales.map(&:key).should == %w(us)
+    @project.locales.map(&:key).should == %w(en)
   end
 
   it 'sets API key' do
@@ -85,8 +85,8 @@ describe Project, 'deploy!' do
     project = Factory(:project)
     other_project_localization = Factory(:localization, :draft_content => 'ignore me')
     project.create_defaults(
-      'us.one' => 'publish me',
-      'us.two' => 'me too'
+      'en.one' => 'publish me',
+      'en.two' => 'me too'
     )
 
     project.localizations.each do |localization|
@@ -120,15 +120,15 @@ end
 describe Project, 'draft_json' do
   let(:project) { Factory(:project) }
 
-  before { project.create_defaults('us.test.key' => 'value') }
+  before { project.create_defaults('en.test.key' => 'value') }
 
   it 'returns draft hash' do
-    project.reload.draft_json.should == Yajl::Encoder.encode('us.test.key' => 'value')
+    project.reload.draft_json.should == Yajl::Encoder.encode('en.test.key' => 'value')
   end
 
   it 'returns draft hash with hierarchy' do
     hierarchichal_representation = {
-      'us' => {
+      'en' => {
         'test' => {
           'key' => 'value'
         }
@@ -154,7 +154,7 @@ describe Project, 'etag' do
 
   it 'returns the same draft etag without updating draft content' do
     project = Factory(:project)
-    project.create_defaults('us.test.one' => 'value')
+    project.create_defaults('en.test.one' => 'value')
     original_etag = project.reload.etag
     Timecop.travel(1.second.from_now)
 
@@ -163,7 +163,7 @@ describe Project, 'etag' do
 
   it 'updates the etag when a blurb is deleted' do
     project = Factory(:project)
-    project.create_defaults('us.test.one' => 'value')
+    project.create_defaults('en.test.one' => 'value')
     project.deploy!
     project.reload
     original_etag = project.etag
@@ -177,9 +177,9 @@ describe Project, 'etag' do
 
   it 'updates etag when deployed' do
     project = Factory(:project)
-    project.create_defaults 'us.test.one' => 'value'
+    project.create_defaults 'en.test.one' => 'value'
     project.deploy!
-    project.create_defaults 'us.test.two' => 'value'
+    project.create_defaults 'en.test.two' => 'value'
     project.reload
     original_etag = project.etag
     Timecop.travel 1.second.from_now
@@ -220,19 +220,19 @@ describe Project, 'published_json' do
   let(:project) { Factory(:project) }
 
   before do
-    project.create_defaults('us.test.key' => 'value')
+    project.create_defaults('en.test.key' => 'value')
     project.deploy!
     project.blurbs.first.localizations.first.revise(:content   => 'new value',
                                                     :published => false).save!
   end
 
   it 'returns published hash' do
-    project.reload.published_json.should == Yajl::Encoder.encode('us.test.key' => 'value')
+    project.reload.published_json.should == Yajl::Encoder.encode('en.test.key' => 'value')
   end
 
   it 'returns draft hash with hierarchy' do
     hierarchichal_representation = {
-      'us' => {
+      'en' => {
         'test' => {
           'key' => 'value'
         }
@@ -246,7 +246,7 @@ end
 describe Project, '.regenerate_caches' do
   it 'generates cached json' do
     project = Factory(:project)
-    project.create_defaults 'us.test.key' => 'value'
+    project.create_defaults 'en.test.key' => 'value'
     project.deploy!
     project.blurbs.first.localizations.first.revise(
       :content => 'new value', :published => false
@@ -256,8 +256,8 @@ describe Project, '.regenerate_caches' do
     Project.regenerate_caches
 
     project.reload
-    project.draft_json.should == Yajl::Encoder.encode('us.test.key' => 'new value')
-    project.published_json.should == Yajl::Encoder.encode('us.test.key' => 'value')
+    project.draft_json.should == Yajl::Encoder.encode('en.test.key' => 'new value')
+    project.published_json.should == Yajl::Encoder.encode('en.test.key' => 'value')
   end
 end
 
