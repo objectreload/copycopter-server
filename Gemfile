@@ -14,6 +14,7 @@ gem "capistrano"
 gem "rvm-capistrano"
 gem "bcrypt-ruby"
 gem "therubyracer"
+gem "unicorn"
 
 group :assets do
   gem 'sass-rails', "~> 3.2.5"
