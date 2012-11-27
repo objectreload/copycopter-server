@@ -4,3 +4,4 @@ vendor/cache
 tmp/**/*
 config/deploy.rb
 config/database.yml
+config/authentication_data.yml
