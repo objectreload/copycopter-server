@@ -2,12 +2,8 @@ require 'extensions/string'
 require 'bcrypt'
 
 class Project < ActiveRecord::Base
-  PEPPER = "4756f17a987b40a4"
-  COST = 10
-  
   # Attributes
-  attr_accessible :name, :password, :username
-  attr_reader :password
+  attr_accessible :name
 
   # Associatons
   has_many :blurbs
@@ -18,7 +14,7 @@ class Project < ActiveRecord::Base
     :dependent => :destroy
 
   # Validations
-  validates_presence_of :api_key, :name, :password, :username
+  validates_presence_of :api_key, :name
   validates_uniqueness_of :api_key
 
   # Callbacks
@@ -33,18 +29,6 @@ class Project < ActiveRecord::Base
 
   def self.active
     where :archived => false
-  end
-  
-  def password=(value)
-    @password = value
-    self.encrypted_password = encrypt_password(@password) if @password.present?
-  end
-  
-  def valid_password?(value)
-    return false if value.blank?
-    bcrypt = BCrypt::Password.new(encrypted_password)
-    password = BCrypt::Engine.hash_secret("#{value}#{PEPPER}", bcrypt.salt)
-    password == encrypted_password
   end
 
   def active?
@@ -140,9 +124,5 @@ class Project < ActiveRecord::Base
     blurbs_hash[:data] = Yajl::Encoder.encode blurbs_hash[:data]
     blurbs_hash[:hierarchichal_data] = Yajl::Encoder.encode blurbs_hash[:hierarchichal_data]
     blurbs_hash
-  end
-  
-  def encrypt_password(password)
-     BCrypt::Password.create("#{password}#{PEPPER}", cost: COST)
   end
 end

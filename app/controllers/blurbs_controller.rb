@@ -1,6 +1,4 @@
 class BlurbsController < ApplicationController
-  before_filter :authorize
-
   def destroy
     blurb = Blurb.find(params[:id])
     blurb.destroy

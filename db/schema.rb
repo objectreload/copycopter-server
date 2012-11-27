@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120315145922) do
+ActiveRecord::Schema.define(:version => 20121127090432) do
 
   create_table "blurbs", :force => true do |t|
     t.datetime "created_at", :null => false
@@ -60,15 +60,13 @@ ActiveRecord::Schema.define(:version => 20120315145922) do
   add_index "localizations", ["blurb_id"], :name => "index_localizations_on_blurb_id"
 
   create_table "projects", :force => true do |t|
-    t.datetime "created_at",                             :null => false
-    t.datetime "updated_at",                             :null => false
+    t.datetime "created_at",                            :null => false
+    t.datetime "updated_at",                            :null => false
     t.string   "api_key"
-    t.boolean  "archived",           :default => false,  :null => false
+    t.boolean  "archived",           :default => false, :null => false
     t.integer  "draft_cache_id"
     t.string   "name"
-    t.string   "encrypted_password"
     t.integer  "published_cache_id"
-    t.string   "username",           :default => "copy", :null => false
   end
 
   add_index "projects", ["archived"], :name => "index_projects_on_archived"

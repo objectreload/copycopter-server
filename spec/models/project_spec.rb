@@ -22,9 +22,7 @@ end
 # Validations
 describe Project do
   it { should validate_presence_of(:name) }
-  it { should validate_presence_of(:password) }
-  it { should validate_presence_of(:username) }
-
+  
   it 'should require case-sensitive unique values for api_key' do
     project = Factory(:project)
     other_project = Factory(:project)
@@ -46,11 +44,6 @@ describe Project, '.create' do
 
   it 'sets API key' do
     @project.api_key.should_not be_nil
-  end
-
-  it 'sets basic auth credentials' do
-    @project.username.should == 'copy'
-    @project.password.should == 'copter'
   end
 end
 

@@ -18,23 +18,10 @@ class ApplicationController < ActionController::Base
   
   def basic_authentication
     if Rails.env.production?
-      authenticate_or_request_with_http_basic do |username, password|
+      authenticate_or_request_with_http_basic("Cramlr") do |username, password|
         username == HTTP_USERNAME && password == HTTP_PASSWORD
       end
     end
-  end
-
-  def authenticate(project)
-    if Rails.env.production?
-      authenticate_or_request_with_http_basic do |username, password|
-        username == project.username && project.valid_password?(password)
-      end
-    end
-  end
-
-  def authorize
-    project = find_by_localization_id || find_by_project_id || find_by_id
-    authenticate project
   end
 
   def find_by_id

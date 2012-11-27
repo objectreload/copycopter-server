@@ -1,6 +1,4 @@
 class ProjectsController < ApplicationController
-  before_filter :authorize, :only => [:show]
-
   def index
     @projects = Project.active
   end
